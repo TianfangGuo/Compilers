@@ -605,9 +605,12 @@ void method_class::code(CgenEnvironment *env) {
     vp.begin_block("entry");
 
     //recurse for alloca statements at the beginning
+    std::cerr <<std::endl << "beginning alloca sweep" << std::endl;
     expr->make_alloca(env);
+    env->reset_counters();
 
     //recurse through code
+    std::cerr <<std::endl << "beginning recursive cgen" << std::endl;
     operand retreg = expr->code(env);
 
     vp.ret(retreg);
@@ -628,7 +631,24 @@ operand assign_class::code(CgenEnvironment *env) {
 
   ValuePrinter vp(*env->cur_stream);
   // TODO: add code here and replace `return operand()`
-  return operand();
+  operand assignVal = expr->code(env);
+  std::basic_string<char> retName = env->new_name();
+//  operand ptr(assignVal.get_type().get_ptr_type(), ptrName);
+//  operand retPtr(assignVal.get_type().get_ptr_type(), name->get_string());
+  operand target(assignVal.get_type().get_ptr_type(), env->new_assign_label(name->get_string(), true));
+  operand ret(assignVal.get_type(), retName);
+//  std::basic_string<char> retName = env->new_name();
+//  operand ptr(assignVal.get_type(), retName);
+//  operand ret(assignVal.get_type(), retName);
+//
+//  //vp.getelementptr( assignVal.get_type(), assignVal, global_value(ptr), assignVal.get_type().get_ptr_type());
+//  vp.load(*env->cur_stream, assignVal.get_type().get_ptr_type(), ptr, ret);
+  vp.store(*env->cur_stream, assignVal, target);
+    //vp.getelementptr()
+
+
+
+  return assignVal;
 }
 
 operand cond_class::code(CgenEnvironment *env) {
@@ -636,7 +656,49 @@ operand cond_class::code(CgenEnvironment *env) {
     std::cerr << "cond" << std::endl;
 
   // TODO: add code here and replace `return operand()`
-  return operand();
+  ValuePrinter vp(*env->cur_stream);
+
+  operand predVal = pred->code(env);
+  operand compTrue = bool_const(true)->code(env);
+  operand compResult(INT1, env->new_name());
+  std::string thenLabel = env->new_then_label();
+  std::string elseLabel = env->new_else_label();
+  std::string fiLabel = env->new_fi_label();
+
+  //setting up the return operand
+    op_type ret_type(VOID);
+    std::string retPtrName = env->new_if_temp_var();
+    std::string retName = env->new_name();
+    if(type == Int){
+        ret_type.set_type(INT32);
+    }
+    else if(type == Bool){
+        ret_type.set_type(INT1);
+    }
+    operand retPtr(ret_type.get_ptr_type(), retPtrName);
+    operand ret(ret_type, retName);
+
+  //evaluate predicate
+  vp.icmp(*env->cur_stream, EQ, predVal, compTrue, compResult);
+  vp.branch_cond(compResult, thenLabel, elseLabel);
+
+  //then block
+  vp.begin_block(thenLabel);
+  operand thenVal = then_exp->code(env);
+  vp.store(thenVal, retPtr);
+  vp.branch_uncond(fiLabel);
+
+  //else block
+  vp.begin_block(elseLabel);
+  operand elseVal = else_exp->code(env);
+  vp.store(elseVal, retPtr);
+  vp.branch_uncond(fiLabel);
+
+  //fi block
+  vp.begin_block(fiLabel);
+  vp.load(*env->cur_stream, ret_type, retPtr, ret);
+
+  return ret;
 }
 
 operand loop_class::code(CgenEnvironment *env) {
@@ -644,7 +706,31 @@ operand loop_class::code(CgenEnvironment *env) {
     std::cerr << "loop" << std::endl;
 
   // TODO: add code here and replace `return operand()`
-  return operand();
+  ValuePrinter vp(*env->cur_stream);
+  std::string condLabel = env->new_loop_condition_label();
+  std::string bodyLabel = env->new_loop_body_label();
+  std::string poolLabel = env->new_pool_label();
+  operand predVal = pred->code(env);
+  operand compTrue = bool_const(true)->code(env);
+  operand compResult(INT1, env->new_name());
+
+
+  vp.branch_uncond(condLabel);
+  //loop condition check, jump to body or pool
+  vp.begin_block(condLabel);
+  vp.icmp(*env->cur_stream, EQ, predVal, compTrue, compResult);
+  vp.branch_cond(compResult, bodyLabel, poolLabel);
+
+  //loop body, jump to condition check
+  vp.begin_block(bodyLabel);
+  operand bodyVal = body->code(env);
+  vp.branch_uncond(condLabel);
+
+  //pool
+  vp.begin_block(poolLabel);
+  //vp.ret(bodyVal);
+
+  return bodyVal;
 }
 
 operand block_class::code(CgenEnvironment *env) {
@@ -671,7 +757,9 @@ operand let_class::code(CgenEnvironment *env) {
   // TODO: add code here and replace `return operand()`
   ValuePrinter vp(*env->cur_stream);
   operand initVal = init->code(env);
-  operand target(VOID, identifier->get_string());
+  //TODO: fix the bug with letsame.cl
+  operand target(VOID, env->new_label(identifier->get_string(), true));
+  //operand target(VOID, "i0");
   if(type_decl == Int){
       //operand target(INT32_PTR, identifier->get_string());
       target.set_type(INT32_PTR);
@@ -680,11 +768,22 @@ operand let_class::code(CgenEnvironment *env) {
       //operand target(INT1_PTR, identifier->get_string());
       target.set_type(INT1_PTR);
   }
-  
 
-  vp.store(*env->cur_stream, target, initVal);
+  //store the constant into a reg
+  //vp.init_constant(env->new_name(), initVal);
+
+  //store that reg to
+  //op_type voidType((op_type_id)VOID);
+  //if(target.get_type().get_id() == initVal.get_type().get_id()) {
+      vp.store(*env->cur_stream, initVal, target);
+  //}
+
+  env->open_scope();
+  env->add_binding(identifier, &target);
 
   operand letBody = body->code(env);
+
+  env->close_scope();
 
   return letBody;
 }
@@ -747,8 +846,8 @@ operand divide_class::code(CgenEnvironment *env) {
   //should check for divide by zero error
   operand errorCheck(INT1, env->new_name());
     int_value zero = 0;
-  std::string passLabel = env->new_label("noDivByZeroError", true);
-  std::string errorLabel = env->new_label("divByZeroError", true);
+  std::string passLabel = env->new_label("noDivByZeroError", false);
+  std::string errorLabel = env->new_label("divByZeroError", false);
 
   vp.icmp(*env->cur_stream, NE, RHS, zero, errorCheck);
   vp.branch_cond(errorCheck, passLabel, "divByZeroError");
@@ -874,8 +973,26 @@ operand object_class::code(CgenEnvironment *env) {
   if (cgen_debug)
     std::cerr << "Object" << std::endl;
 
+
   // TODO: add code here and replace `return operand()`
-  return operand();
+  ValuePrinter vp(*env->cur_stream);
+  op_type p = VOID;
+  op_type t = VOID;
+  if(this->get_type() == Int){
+      t = INT32;
+      p = INT32_PTR;
+  }
+  else if(this->get_type() == Bool){
+      t = INT1;
+      p = INT1_PTR;
+  }
+
+  operand ret(t, env->new_name());
+  operand value(p, env->new_obj_label(name->get_string(), true));
+
+  vp.load(*env->cur_stream, t, value,ret);
+
+  return ret;
 }
 
 operand no_expr_class::code(CgenEnvironment *env) {
@@ -883,7 +1000,9 @@ operand no_expr_class::code(CgenEnvironment *env) {
     std::cerr << "No_expr" << std::endl;
 
   // TODO: add code here and replace `return operand()`
-  return operand();
+  operand ret(EMPTY, "noExpr");
+
+  return ret;
 }
 
 //*****************************************************************
@@ -1017,6 +1136,17 @@ void cond_class::make_alloca(CgenEnvironment *env) {
     std::cerr << "cond" << std::endl;
 
   // TODO: add code here
+  ValuePrinter vp(*env->cur_stream);
+  op_type ret_type(VOID);
+  if(type == Int){
+      ret_type.set_type(INT32);
+  }
+  else if(type == Bool){
+      ret_type.set_type(INT1);
+  }
+  operand retPtr(ret_type.get_ptr_type(), env->new_if_temp_var());
+
+  vp.alloca_mem(*env->cur_stream, ret_type, retPtr);
 
   pred->make_alloca(env);
   then_exp->make_alloca(env);
@@ -1050,7 +1180,7 @@ void let_class::make_alloca(CgenEnvironment *env) {
   // TODO: add code here
   ValuePrinter vp(*env->cur_stream);
   op_type type(type_decl->get_string());
-  operand op2(type, identifier->get_string());
+  operand op2(type, env->new_label(identifier->get_string(), true));
   if(type_decl == Int){
       vp.alloca_mem(*env->cur_stream, INT32, op2);
   }
