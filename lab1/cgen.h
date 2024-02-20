@@ -174,12 +174,14 @@ public:
   std::string new_else_label() { return "else." + std::to_string(else_count++); }
   std::string new_fi_label() { return "fi." + std::to_string(fi_count++);}
   std::string new_obj_label(const std::string &prefix, bool increment) {
-      std::string suffix = std::to_string(obj_count);
+      //std::string suffix = std::to_string(obj_count);
+      std::string suffix = std::to_string(block_count);
       obj_count += increment;
       return prefix + suffix;
   }
   std::string new_assign_label(const std::string &prefix, bool increment) {
-      std::string suffix = std::to_string(assign_count);
+      //std::string suffix = std::to_string(assign_count);
+      std::string suffix = std::to_string(block_count);
       assign_count += increment;
       return prefix + suffix;
   }

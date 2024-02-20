@@ -643,7 +643,9 @@ operand assign_class::code(CgenEnvironment *env) {
 //
 //  //vp.getelementptr( assignVal.get_type(), assignVal, global_value(ptr), assignVal.get_type().get_ptr_type());
 //  vp.load(*env->cur_stream, assignVal.get_type().get_ptr_type(), ptr, ret);
-  vp.store(*env->cur_stream, assignVal, target);
+  operand *target1 = env->find_in_scopes(name);
+
+  vp.store(*env->cur_stream, assignVal, *target1);
     //vp.getelementptr()
 
 
@@ -710,16 +712,20 @@ operand loop_class::code(CgenEnvironment *env) {
   std::string condLabel = env->new_loop_condition_label();
   std::string bodyLabel = env->new_loop_body_label();
   std::string poolLabel = env->new_pool_label();
-  operand predVal = pred->code(env);
-  operand compTrue = bool_const(true)->code(env);
-  operand compResult(INT1, env->new_name());
+//  operand predVal = pred->code(env);
+//  operand compTrue = bool_const(true)->code(env);
+//  operand compResult(INT1, env->new_name());
 
 
   vp.branch_uncond(condLabel);
   //loop condition check, jump to body or pool
   vp.begin_block(condLabel);
-  vp.icmp(*env->cur_stream, EQ, predVal, compTrue, compResult);
-  vp.branch_cond(compResult, bodyLabel, poolLabel);
+  operand predVal = pred->code(env);
+  operand compTrue = bool_const(true)->code(env);
+  operand compResult(INT1, env->new_name());
+  //vp.icmp(*env->cur_stream, EQ, predVal, compTrue, compResult);
+//  vp.branch_cond(compResult, bodyLabel, poolLabel);
+    vp.branch_cond(predVal, bodyLabel, poolLabel);
 
   //loop body, jump to condition check
   vp.begin_block(bodyLabel);
@@ -757,7 +763,7 @@ operand let_class::code(CgenEnvironment *env) {
   // TODO: add code here and replace `return operand()`
   ValuePrinter vp(*env->cur_stream);
   operand initVal = init->code(env);
-  //TODO: fix the bug with letsame.cl
+  //TODO: two bugs to fix: naming and non-assignment lets
   operand target(VOID, env->new_label(identifier->get_string(), true));
   //operand target(VOID, "i0");
   if(type_decl == Int){
@@ -771,12 +777,15 @@ operand let_class::code(CgenEnvironment *env) {
 
   //store the constant into a reg
   //vp.init_constant(env->new_name(), initVal);
-
   //store that reg to
   //op_type voidType((op_type_id)VOID);
-  //if(target.get_type().get_id() == initVal.get_type().get_id()) {
+  operand isVoid(EMPTY, env->new_name());
+  if(initVal.get_type().get_id() == isVoid.get_type().get_id()) {
+
+  }
+  else{
       vp.store(*env->cur_stream, initVal, target);
-  //}
+  }
 
   env->open_scope();
   env->add_binding(identifier, &target);
@@ -989,8 +998,9 @@ operand object_class::code(CgenEnvironment *env) {
 
   operand ret(t, env->new_name());
   operand value(p, env->new_obj_label(name->get_string(), true));
+  operand *value1 = env->find_in_scopes(name);
 
-  vp.load(*env->cur_stream, t, value,ret);
+  vp.load(*env->cur_stream, t, *value1,ret);
 
   return ret;
 }
@@ -1234,6 +1244,14 @@ void lt_class::make_alloca(CgenEnvironment *env) {
     std::cerr << "lt" << std::endl;
 
   // TODO: add code here
+  ValuePrinter vp(*env->cur_stream);
+  op_type boolType = op_type_id (INT1);
+    operand retPtr(boolType.get_ptr_type(), env->new_if_temp_var());
+
+    vp.alloca_mem(*env->cur_stream, boolType, retPtr);
+
+    e1->make_alloca(env);
+    e2->make_alloca(env);
 }
 
 void eq_class::make_alloca(CgenEnvironment *env) {
