@@ -855,7 +855,7 @@ operand divide_class::code(CgenEnvironment *env) {
   //should check for divide by zero error
   operand errorCheck(INT1, env->new_name());
     int_value zero = 0;
-  std::string passLabel = env->new_label("noDivByZeroError", false);
+  std::string passLabel = env->new_label("noDivByZeroError", true);
   std::string errorLabel = env->new_label("divByZeroError", false);
 
   vp.icmp(*env->cur_stream, NE, RHS, zero, errorCheck);
