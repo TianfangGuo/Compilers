@@ -1,0 +1,3 @@
+./reference-binaries/lexer test/main.CL | ./reference-binaries/parser test/main.CL | ./reference-binaries/semant test/main.CL > main_test.ast
+
+src/cgen-1 main_test.ast
