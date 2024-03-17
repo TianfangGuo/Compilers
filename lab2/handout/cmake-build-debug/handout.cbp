@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="handout"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="handout">
+				<Option output="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/handout.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/include"/>
+					<Add directory="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src"/>
+					<Add directory="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src_llvm"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 handout"/>
+					<CompileFile command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="handout/fast">
+				<Option output="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/handout.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/include"/>
+					<Add directory="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src"/>
+					<Add directory="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src_llvm"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/x86_64-pc-cygwin"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include/c++/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-cygwin/11/../../../../lib/../include/w32api"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 handout/fast"/>
+					<CompileFile command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make.exe -j16 -f &quot;/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/include/ast_parse.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/include/cool_tree.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/include/copyright.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/include/stringtab.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/include/symtab.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/include/tree.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/include/utils.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/src/ast_lex.cc">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/src/ast_parse.cc">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/src/cgen_main.cc">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/src/cool_tree.cc">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/src/dumptype.cc">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/src/stringtab.cc">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/src/tree.cc">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/cool-support/src/utils.cc">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src/cgen.cc">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src/cgen.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src/cool_tree.handcode.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src/coolrt.cc">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src/coolrt.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src/operand.cc">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src/operand.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src/stringtab.handcode.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src/value_printer.cc">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src/value_printer.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src_llvm/cgen.cc">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src_llvm/cgen.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src_llvm/cool_tree.handcode.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/src_llvm/stringtab.handcode.h">
+			<Option target="handout"/>
+		</Unit>
+		<Unit filename="/cygdrive/c/Users/taylo/Documents/GitHub/Compilers/lab2/handout/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

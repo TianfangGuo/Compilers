@@ -1,0 +1,28 @@
+#5
+_program
+  #5
+  _class
+    Main
+    Object
+    "condfalse.cl"
+    (
+    #4
+    _method
+      main
+      Int
+      #3
+      _cond
+        #3
+        _bool
+          0
+        : Bool
+        #3
+        _int
+          3
+        : Int
+        #3
+        _int
+          5
+        : Int
+      : Int
+    )

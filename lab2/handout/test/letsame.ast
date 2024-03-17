@@ -1,0 +1,63 @@
+#7
+_program
+  #7
+  _class
+    Main
+    Object
+    "letsame.cl"
+    (
+    #6
+    _method
+      main
+      Int
+      #5
+      _block
+        #3
+        _let
+          i
+          Int
+          #3
+          _int
+            10
+          : Int
+          #3
+          _block
+            #3
+            _assign
+              i
+              #3
+              _int
+                10
+              : Int
+            : Int
+          : Int
+        : Int
+        #4
+        _let
+          i
+          Int
+          #4
+          _int
+            10
+          : Int
+          #4
+          _block
+            #4
+            _assign
+              i
+              #4
+              _sub
+                #4
+                _object
+                  i
+                : Int
+                #4
+                _int
+                  2
+                : Int
+              : Int
+            : Int
+          : Int
+        : Int
+      : Int
+    )
