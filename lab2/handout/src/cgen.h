@@ -114,6 +114,31 @@ public:
   // TODO: Complete the implementations of following functions
   // and add more as necessary
 
+    //containers
+    //6,7
+    std::vector<operand> formal_operand_list;
+    std::vector<op_type> vtable_op_type_list;
+    std::vector<const_value> vtable_constant_value_list;
+
+    //1
+    std::vector<Symbol> attribute_list;
+    std::vector<Symbol> attribute_type_list;
+    std::vector<std::string> attribute_return_list;
+
+    //2
+    std::vector<op_type> attr__ret_types;
+
+    //8
+    std::vector<op_type> nvtable_op_types;
+    std::vector<const_value> nvtable_const_values;
+    std::vector<std::string> nvtable_reutenr_list;
+
+    //3
+    std::vector<const_value> vt_val;
+    std::vector<op_type> vt_type;
+
+    //additions
+
   // Class setup. You need to write the body of this function.
   void setup(int tag, int depth);
 #ifdef LAB2
@@ -126,6 +151,11 @@ public:
 #endif
   void codeGenMainmain();
 
+// TODO: Add more functions / fields here as necessary.
+  op_type type_identifier(Symbol type);
+
+    bool is_built_in_class_question_mark(Symbol name);
+    bool is_built_in_class_question_mark(std::string name);
 private:
   CgenNode *parentnd;               // Parent of class
   std::vector<CgenNode *> children; // Children of class
@@ -135,7 +165,7 @@ private:
   int tag, max_child;
   std::ostream *ct_stream;
 
-  // TODO: Add more functions / fields here as necessary.
+
 };
 
 // CgenEnvironment provides the environment for code generation of a method.
@@ -221,6 +251,11 @@ public:
   void close_scope() { var_table.exitscope(); }
 
   // TODO: Add more functions as necessary.
+    void set_bitcast_return(operand input){
+      this->bc_return = input;
+  }
+
+
 
 private:
   cool::SymbolTable<operand>
@@ -231,6 +266,8 @@ private:
 
 public:
   std::ostream *cur_stream;
+  operand bc_return;
+
 };
 
 #ifdef LAB2

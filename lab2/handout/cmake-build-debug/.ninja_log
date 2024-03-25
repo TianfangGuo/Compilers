@@ -1,0 +1,7 @@
+# ninja log v5
+24	411	7326100926734529	CMakeFiles/handout.dir/cool-support/src/tree.cc.obj	7760c19dd9560f35
+18	435	7326100926974514	CMakeFiles/handout.dir/src/operand.cc.obj	92c0a62af0e47b1f
+9	482	7326100927444501	CMakeFiles/handout.dir/cool-support/src/utils.cc.obj	fb697ee59822cf14
+21	493	7326100927564505	CMakeFiles/handout.dir/cool-support/src/stringtab.cc.obj	a9c8b83249dddc0c
+0	633	7326100928934515	CMakeFiles/handout.dir/cool-support/src/ast_lex.cc.obj	373e4a145458ca15
+34	670	7326100929304492	CMakeFiles/handout.dir/src/value_printer.cc.obj	de71e48807f700cc

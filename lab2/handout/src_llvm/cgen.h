@@ -20,6 +20,8 @@
 #include <llvm/IR/Module.h>
 #include <llvm/Support/raw_ostream.h>
 
+#define LAB2
+
 class CgenNode;
 
 // CgenClassTable represents the top level of a Cool program, which is

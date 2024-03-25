@@ -130,6 +130,7 @@ void CgenClassTable::install_basic_classes() {
   // Primitive types masquerading as classes. This is done so we can
   // get the necessary Symbols for the innards of String, Int, and Bool
   //
+  //
   Class_ primstringcls =
       class_(prim_string, No_class, nil_Features(), filename);
   install_special_class(new CgenNode(primstringcls, CgenNode::Basic, this));
@@ -316,6 +317,64 @@ void CgenClassTable::setup_external_functions() {
 
 #ifdef LAB2
   // TODO: add code here
+  op_type OBJECT("Object*");
+  op_type STRING("String*");
+  std::vector<op_type> args_OBJECT_new;
+  std::vector<op_type> args_OBJECT_;
+  args_OBJECT_.push_back(OBJECT);
+  vp.declare(*ct_stream, OBJECT, "Object_new", args_OBJECT_new);
+  vp.declare(*ct_stream, OBJECT, "Object_abort", args_OBJECT_);
+  vp.declare(*ct_stream, OBJECT, "Object_type_name", args_OBJECT_);
+  vp.declare(*ct_stream, OBJECT, "Object_copy", args_OBJECT_);
+
+    op_type IO("IO*");
+    std::vector<op_type> args_IO_new;
+    std::vector<op_type> args_IO_out_str;
+    args_IO_out_str.push_back(IO);
+    args_IO_out_str.push_back(STRING);
+    std::vector<op_type> args_IO_out_int;
+    args_IO_out_int.push_back(IO);
+    args_IO_out_int.push_back(i32_type);
+    std::vector<op_type> args_IO_in_;
+    args_IO_in_.push_back(IO);
+    vp.declare(*ct_stream, IO, "IO_new", args_IO_new);
+    vp.declare(*ct_stream, IO, "IO_out_string", args_IO_out_str);
+    vp.declare(*ct_stream, IO, "IO_out_int", args_IO_out_int);
+    vp.declare(*ct_stream, STRING, "IO_in_string", args_IO_in_);
+    vp.declare(*ct_stream, i32_type, "IO_in_int", args_IO_in_);
+
+    //op_type STRING("String*");
+    std::vector<op_type> args_STR_new;
+    std::vector<op_type> args_STR_length;
+    args_STR_length.push_back(STRING);
+    std::vector<op_type> args_STR_concat;
+    args_STR_concat.push_back(STRING);
+    args_STR_concat.push_back(STRING);
+    std::vector<op_type> args_STR_substring;
+    args_STR_substring.push_back(STRING);
+    args_STR_substring.push_back(i32_type);
+    args_STR_substring.push_back(i32_type);
+    vp.declare(*ct_stream, STRING, "String_new", args_STR_new);
+    vp.declare(*ct_stream, i32_type, "String_length", args_STR_length);
+    vp.declare(*ct_stream, STRING, "String_concat", args_STR_concat);
+    vp.declare(*ct_stream, STRING, "String_substr", args_STR_substring);
+
+    op_type INT("INT*");
+    std::vector<op_type> args_INT_new;
+    std::vector<op_type> args_INT_init;
+    args_INT_init.push_back(INT);
+    args_INT_init.push_back(i32_type);
+    vp.declare(*ct_stream, INT, "Int_new", args_INT_new);
+    vp.declare(*ct_stream, void_type, "Int_init", args_INT_init);
+
+    op_type BOOL("Bool*");
+    std::vector<op_type> args_BOOL_new;
+    std::vector<op_type> args_BOOL_init;
+    args_BOOL_init.push_back(BOOL);
+    args_BOOL_init.push_back(op_type(INT1));
+    vp.declare(*ct_stream, BOOL, "Bool_new", args_BOOL_new);
+    vp.declare(*ct_stream, void_type, "Bool_init", args_BOOL_init);
+
 #endif
 }
 
@@ -355,6 +414,15 @@ void CgenClassTable::code_module() {
 #ifdef LAB2
 void CgenClassTable::code_classes(CgenNode *c) {
   // TODO: add code here
+  //first call code
+  c->code_class();
+  //call code on each child
+  std::vector<CgenNode *> children = c->get_children();
+  //std::vector<int>::iterator iter = children.begin();
+  for(int i = 0; i < children.size(); i++){
+      code_classes(children[i]);
+  }
+
 }
 #endif
 
@@ -371,33 +439,44 @@ void CgenClassTable::code_constants() {
 void CgenClassTable::code_main(){
 // TODO: add code here
 
-    ValuePrinter main(*ct_stream);
-    op_type int32(static_cast<op_type_id>(8));
-    std::vector<operand> args;
-    std::vector<op_type> arg_types;
-    operand main_ret(int32, "main_ret");
-
-    op_type int8_ptr(static_cast<op_type_id>(6));
-    op_type int8(static_cast<op_type_id>(5));
-    op_arr_type i8_x_25(INT8, 25);
-    operand str_ret(int8_ptr, "str_ret");
-    std::vector<op_type>printf_args({int8_ptr, op_type(VAR_ARG)});
-    std::vector<operand>printf_ret({str_ret, main_ret});
-
-    const_value main_return(i8_x_25, "Main.main() returned %d\n", true);
-
-// str assignment "Main.main() returned %d\n"
-    main.init_constant("str", main_return);
-
-// Define a function main that has no parameters and returns an i32
-    //std::ostream *stream;
-    main.define(int32, "main",args);
-
-// Define an entry basic block
-    main.begin_block("entry");
-
-// Call Main_main(). This returns int for phase 1, Object for phase 2
-    main.call(*ct_stream, arg_types, "Main_main", true, args, main_ret);
+    ValuePrinter vp(*ct_stream);
+//    op_type int32(static_cast<op_type_id>(8));
+//    std::vector<operand> args;
+//    std::vector<op_type> arg_types;
+//    operand main_ret(int32, "main_ret");
+//
+//    op_type int8_ptr(static_cast<op_type_id>(6));
+//    op_type int8(static_cast<op_type_id>(5));
+//    op_arr_type i8_x_25(INT8, 25);
+//    operand str_ret(int8_ptr, "str_ret");
+//    std::vector<op_type>printf_args({int8_ptr, op_type(VAR_ARG)});
+//    std::vector<operand>printf_ret({str_ret, main_ret});
+//
+//    const_value main_return(i8_x_25, "Main.main() returned %d\n", true);
+//
+//// str assignment "Main.main() returned %d\n"
+//    main.init_constant("str", main_return);
+//
+//// Define a function main that has no parameters and returns an i32
+//    //std::ostream *stream;
+//    main.define(int32, "main",args);
+//
+//// Define an entry basic block
+//    main.begin_block("entry");
+//
+//// Call Main_main(). This returns int for phase 1, Object for phase 2
+//    main.call(*ct_stream, arg_types, "Main_main", true, args, main_ret);
+    vp.define(op_type(INT32), "main", std::vector<operand>());
+    vp.begin_block("entry");
+    operand main_ptr(op_type("Main*"), "main_object");
+    vp.call(*ct_stream, std::vector<op_type>(), "Main_new", true, std::vector<operand>(), main_ptr);
+    std::vector<op_type> args;
+    args.push_back(op_type("Main*"));
+    std::vector<operand> args2;
+    args2.push_back(main_ptr);
+    operand result(op_type("Object*"), "main_ret");
+    vp.call(*ct_stream, args, "Main::main", true, args2, result);
+    vp.ret(int_value(0));
 
 #ifdef LAB2
 // LAB2
@@ -416,7 +495,7 @@ void CgenClassTable::code_main(){
     main.ret(int_value(0));
 
 #endif
-    main.end_define();
+    vp.end_define();
 }
 
 // Get the root of the class tree.
@@ -498,8 +577,27 @@ void CgenNode::setup(int tag, int depth) {
   this->tag = tag;
 #ifdef LAB2
   layout_features();
-
+    ValuePrinter vp(*ct_stream);
   // TODO: add code here
+  if(this->parentnd->basic() == false){
+      this->attr__ret_types.push_back(this->parentnd->get_type_name()+"*");
+  }
+
+  //inheritance
+  if(basic_status == basic()){
+
+  }
+  else{
+    //TODO: handle inheritance
+  }
+  for(int i = 0; i < this->nvtable_op_types.size(); i++){
+    vt_type.push_back(this->nvtable_op_types.at(i));
+  }
+  for(int i = 0; i < this->nvtable_const_values.size(); i++){
+      vt_val.push_back(this->nvtable_const_values.at(i));
+//TODO: finish
+  }
+
 
 
 #endif
@@ -510,6 +608,11 @@ void CgenNode::setup(int tag, int depth) {
 // and assigning each attribute a slot in the class structure.
 void CgenNode::layout_features() {
   // TODO: add code here
+    for(int i = features->first(); features->more(i); i = features->next(i)) {
+        features->nth(i)->layout_feature(this);
+    }
+
+
 }
 
 // Class codegen. This should performed after every class has been setup.
@@ -520,6 +623,28 @@ void CgenNode::code_class() {
     return;
   }
   // TODO: add code here
+
+  CgenEnvironment *env = new CgenEnvironment(*(this->get_classtable()->ct_stream), this);
+  ValuePrinter vp(*env->cur_stream);
+
+//  //TODO: methods
+//
+//  //op_type type_ptr(this->get_type_name()+"*");
+//  std::string type_name = this->get_type_name();
+//  vp.define(type_name+"*", type_name+"new", std::vector<operand>());
+//  vp.begin_block("entry");
+//  //op_type vt_ptr(type_name+"_vtable*", type_name+"_vtable_prototype");
+//    op_type vt_ptr(type_name+"_vtable*");
+//  operand vt_operand = vp.getelementptr(vt_ptr, operand(INT32, "0"), operand(INT32, "1"), op_type(INT32_PTR));
+//  operand ld_ret = vp.load(op_type(INT8_PTR), vt_operand);
+//  std::vector<operand> ld_ret_vec;
+//  ld_ret_vec.push_back(ld_ret);
+//  operand rcall_ret = vp.call(std::vector<op_type>(INT8_PTR), op_type(INT8_PTR), "malloc", true, ld_ret_vec);
+//  operand bc_ret = vp.bitcast(rcall_ret, type_name+"*");
+//  env->set_bitcast_return(bc_ret);
+//    //operand *element_ptr = vp.getelementptr();
+//    return;
+
 }
 
 void CgenNode::code_init_function(CgenEnvironment *env) {
@@ -989,28 +1114,30 @@ operand bool_const_class::code(CgenEnvironment *env) {
 operand object_class::code(CgenEnvironment *env) {
   if (cgen_debug)
     std::cerr << "Object" << std::endl;
+    ValuePrinter vp(*env->cur_stream);
+
+//  // TODO: add code here and replace `return operand()`
+//  ValuePrinter vp(*env->cur_stream);
+//  op_type p = VOID;
+//  op_type t = VOID;
+//  if(this->get_type() == Int){
+//      t = INT32;
+//      p = INT32_PTR;
+//  }
+//  else if(this->get_type() == Bool){
+//      t = INT1;
+//      p = INT1_PTR;
+//  }
+//
+//  operand ret(t, env->new_name());
+//  operand value(p, env->new_obj_label(name->get_string(), true));
+//  operand *value1 = env->find_in_scopes(name);
+//
+//  vp.load(*env->cur_stream, t, *value1,ret);
+//
+//  return ret;
 
 
-  // TODO: add code here and replace `return operand()`
-  ValuePrinter vp(*env->cur_stream);
-  op_type p = VOID;
-  op_type t = VOID;
-  if(this->get_type() == Int){
-      t = INT32;
-      p = INT32_PTR;
-  }
-  else if(this->get_type() == Bool){
-      t = INT1;
-      p = INT1_PTR;
-  }
-
-  operand ret(t, env->new_name());
-  operand value(p, env->new_obj_label(name->get_string(), true));
-  operand *value1 = env->find_in_scopes(name);
-
-  vp.load(*env->cur_stream, t, *value1,ret);
-
-  return ret;
 }
 
 operand no_expr_class::code(CgenEnvironment *env) {
@@ -1077,11 +1204,19 @@ operand typcase_class::code(CgenEnvironment *env) {
 operand new__class::code(CgenEnvironment *env) {
   if (cgen_debug)
     std::cerr << "newClass" << std::endl;
+    ValuePrinter vp(*env->cur_stream);
 #ifndef LAB2
   assert(0 && "Unsupported case for phase 1");
 #else
   // TODO: add code here and replace `return operand()`
-  return operand();
+  operand class_(op_type("unkown"), env->get_class()->get_type_name()+"*");
+  std::vector<op_type> types_blk;
+  types_blk.push_back(op_type());
+  std::vector<operand> args;
+    args.push_back(operand());
+  vp.call(*env->cur_stream, types_blk, env->get_class()->get_type_name()+"_new", false, args, class_);
+  env->add_binding(type_name, &class_);
+  //return operand();
 #endif
 }
 
@@ -1096,12 +1231,76 @@ operand isvoid_class::code(CgenEnvironment *env) {
 #endif
 }
 
+
+op_type CgenNode::type_identifier(Symbol type){
+    op_type optype_type = EMPTY;
+    if(type == Int){
+        optype_type = INT32;
+    }
+    else if(type == Bool){
+        optype_type = INT1;
+    }
+    else if(type == String){
+        optype_type = INT8_PTR;
+    }
+    else if(type == SELF_TYPE){
+        optype_type = this->get_type_name();
+    }
+    else{
+        optype_type = this->get_type_name() + "*";
+    }
+    return optype_type;
+}
+
+bool is_built_in_class_question_mark(std::string name){
+    if(name != "Object" && name != "Bool" && name != "Int" && name != "String" && name != "IO"){
+        return true;
+    }
+    else return false;
+}
+
+
 // Create the LLVM Function corresponding to this method.
 void method_class::layout_feature(CgenNode *cls) {
 #ifndef LAB2
   assert(0 && "Unsupported case for phase 1");
 #else
+
   // TODO: add code here
+  CgenEnvironment* env = new CgenEnvironment(*(cls->get_classtable()->ct_stream), cls);
+  //std::string type = cls->get_type_name();
+  cls->attribute_list.push_back(this->name);
+  cls->attribute_type_list.push_back(this->return_type);
+  std::string vtable_ptr_feature = cls->get_type_name()+"_"+name->get_string();
+  Symbol type = this->name;
+  op_type optype_type = cls->type_identifier(type);
+  operand self(optype_type, type->get_string());
+
+  std::vector<op_type> formals;
+  //operand
+  formals.push_back(optype_type);
+  cls->formal_operand_list.push_back(self);
+
+  for(int i = this->formals->first(); this->formals->more(i); this->formals->next(i)){
+      optype_type = cls->type_identifier(this->formals->nth(i)->get_type_decl());
+      formals.push_back(optype_type);
+      operand self_temp(optype_type, this->formals->nth(i)->get_name()->get_string());
+      cls->formal_operand_list.push_back(self_temp);
+  }
+
+  //create the actual vtable
+  if(is_built_in_class_question_mark(cls->get_type_name())){
+      op_type feature(cls->type_identifier(return_type));
+      op_func_type feature_func_type(feature, formals);
+      cls->nvtable_op_types.push_back(feature_func_type);
+      cls->nvtable_reutenr_list.push_back(return_type->get_string());
+      global_value vtable_ptr_feature_GLOBAL(op_type(vtable_ptr_feature), vtable_ptr_feature);
+      const_value vtable_ptr_feature_CONST(op_type(vtable_ptr_feature), vtable_ptr_feature_GLOBAL.get_name(), false);
+      cls->nvtable_const_values.push_back(vtable_ptr_feature_CONST);
+
+  }
+
+
 #endif
 }
 
@@ -1126,6 +1325,26 @@ void attr_class::layout_feature(CgenNode *cls) {
   assert(0 && "Unsupported case for phase 1");
 #else
   // TODO: add code here
+  CgenEnvironment* env = new CgenEnvironment(*(cls->get_classtable()->ct_stream), cls);
+  std::string type_decl_str = type_decl->get_string();
+
+  if(type_decl_str != "Object" && type_decl_str != "IO" && type_decl_str != "String" && type_decl_str != "Main" && type_decl_str != "SELF_TYPE"){
+      if(type_decl_str == "Int" || type_decl_str == "int"){
+          cls->attr__ret_types.push_back(op_type(INT32));
+      }
+      else if(type_decl_str == "Bool" || type_decl_str == "bool"){
+          cls->attr__ret_types.push_back(op_type(INT1));
+      }
+      else if(type_decl_str == "sbyte*"){
+          cls->attr__ret_types.push_back(op_type(INT8_PTR));
+      }
+      else{
+          op_type type(type_decl_str+"*");
+          cls->attr__ret_types.push_back(type);
+      }
+
+  }
+
 #endif
 }
 
@@ -1134,6 +1353,19 @@ void attr_class::code(CgenEnvironment *env) {
   assert(0 && "Unsupported case for phase 1");
 #else
   // TODO: add code here
+  ValuePrinter vp(*env->cur_stream);
+  //if metholy
+  //else
+  operand attribute_temp_result(init->code(env));
+  operand *self_lookup(env->find_in_scopes(self));
+  op_type attribute_type(env->get_class()->get_type_name()+"*");
+  op_type expression_type(attribute_temp_result.get_type().get_ptr_type());
+    operand attribute_op(attribute_type, env->bc_return.get_name().substr(0, env->bc_return.get_name().length()-1));
+  //why the fuck won't you take the god damn arguments they match the signature!!!!!!!!
+    //operand aret = vp.getelementptr(attribute_op, int_value(0), int_value(1), expression_type);
+    //vp.store(*env->cur_stream, attribute_temp_result, aret);
+
+
 #endif
 }
 
